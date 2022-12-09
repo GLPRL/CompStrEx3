@@ -1,0 +1,49 @@
+#318778594 Gal Pearl
+##################################################
+.data
+formatstringsize:  .string "%d"                    #format for size
+datastringsize:    .quad 0                         #string for size
+formatdata:        .string "%s"                    #format for data
+stringdata:        .quad 0                         #string for data
+##################################################
+	.section 	.rodata
+##################################################
+	.text
+.globl	main	                           	        #initial point of this program
+    .type	main, @function                                  #the main label is a function
+##################################################
+main:
+    movq    %rsp, %rbp                                     #for correct debugging
+    push 	  %rbp                                           #push base pointer
+    movq    $0x00, %rax
+    #Receiving size of string 1: saved at r8
+    leaq    formatstringsize(%rip), %rdi                   #loading format and string for scanf on size
+    leaq    datastringsize(%rip), %rsi
+    call    scanf
+    movb     %sil, %r8b
+    mov     $0x00, %rsi
+    mov     $0x00, %rdi
+    #Receiving the string itself 1: saved at r9
+    movq    $0x00, %rax
+    leaq    formatdata(%rip), %rdi                         #loading format and string for scanf on data
+    leaq    stringdata(%rip), %rsi
+    call    scanf
+    movb    %sil, %r9b
+    mov     $0x00, %rsi
+    mov     $0x00, %rdi
+    movq    $0x00, %rax
+    #Receiving size of string 2: saved at rsi
+    leaq    formatstringsize(%rip), %rdi                   #loading format and string for scanf on size
+    leaq    datastringsize(%rip), %rsi
+    call    scanf
+    #Receiving the string itself 2: saved at rdi
+    mov     $0x00, %rsi
+    mov     $0x00, %rdi
+    movq    $0x00, %rax
+    leaq    formatdata(%rip), %rdi                         #loading format and string for scanf on data
+    leaq    stringdata(%rip), %rsi
+    call    scanf
+    mov     $0x00, %rdi
+    movq    %rsi, %rdi
+    pop     %rbp
+    ret
