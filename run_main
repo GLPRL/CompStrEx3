@@ -1,49 +1,57 @@
 #318778594 Gal Pearl
-##################################################
+###########################################################
 .data
 formatstringsize:  .string "%d"                    #format for size
 datastringsize:    .quad 0                         #string for size
 formatdata:        .string "%s"                    #format for data
 stringdata:        .quad 0                         #string for data
-##################################################
+###########################################################
 	.section 	.rodata
-##################################################
+###########################################################
 	.text
-.globl	main	                           	        #initial point of this program
-    .type	main, @function                                  #the main label is a function
-##################################################
+.globl    main
+    .type main, @function  
+###########################################################
 main:
-    movq    %rsp, %rbp                                     #for correct debugging
-    push 	  %rbp                                           #push base pointer
-    movq    $0x00, %rax
-    #Receiving size of string 1: saved at r8
+    pushq 	  %rbp                                           #Save old base pointer
+    movq    %rsp, %rbp                                     
+    #Receiving size of string 1: saved at r12
+    movq    $0x00, %rsi                                    #zeroes for correct future instructions
+    movq    $0x00, %rdi                                    #zeroes for correct future instructions
+    movq    $0x00, %rax                                    #zeroes for correct future instructions
     leaq    formatstringsize(%rip), %rdi                   #loading format and string for scanf on size
     leaq    datastringsize(%rip), %rsi
-    call    scanf
-    movb     %sil, %r8b
-    mov     $0x00, %rsi
-    mov     $0x00, %rdi
-    #Receiving the string itself 1: saved at r9
-    movq    $0x00, %rax
+    call    scanf                                          #receive user input for first size
+    subq    $0x20, %rbp
+    movq    %rsi, %r12
+    movl    %esi, -0x4(%rbp)                               #saving first size in stack
+    #Receiving the string itself 1: saved at r13    
+    movq    $0x00, %rsi                                    #zeroes for correct future instructions
+    movq    $0x00, %rdi                                    #zeroes for correct future instructions
+    movq    $0x00, %rax                                    #zeroes for correct future instructions
     leaq    formatdata(%rip), %rdi                         #loading format and string for scanf on data
     leaq    stringdata(%rip), %rsi
-    call    scanf
-    movb    %sil, %r9b
-    mov     $0x00, %rsi
-    mov     $0x00, %rdi
-    movq    $0x00, %rax
-    #Receiving size of string 2: saved at rsi
+    call    scanf                                          #receive user input for first string
+    movq    %rsi, %r13
+    movl    %esi, -0x8(%rbp)                               #saving first string in stack
+    #Receiving size of string 2: saved at r14
+    movq    $0x00, %rsi                                    #zeroes for correct future instructions
+    movq    $0x00, %rdi                                    #zeroes for correct future instructions
+    movq    $0x00, %rax                                    #zeroes for correct future instructions
     leaq    formatstringsize(%rip), %rdi                   #loading format and string for scanf on size
     leaq    datastringsize(%rip), %rsi
-    call    scanf
-    #Receiving the string itself 2: saved at rdi
-    mov     $0x00, %rsi
-    mov     $0x00, %rdi
-    movq    $0x00, %rax
+    call    scanf                                          #receive user input for second size
+    movq    %rsi, %r14
+    movl    %esi, -16(%rbp)                                #saving second size in stack
+    #Receiving the string itself 2: saved at r15
+    movq    $0x00, %rsi                                    #zeroes for correct future instructions
+    movq    $0x00, %rdi                                    #zeroes for correct future instructions
+    movq    $0x00, %rax                                    #zeroes for correct future instructions
     leaq    formatdata(%rip), %rdi                         #loading format and string for scanf on data
     leaq    stringdata(%rip), %rsi
-    call    scanf
-    mov     $0x00, %rdi
-    movq    %rsi, %rdi
-    pop     %rbp
+    call    scanf                                          #receive user input for second string
+    movq    %rsi, %r15
+    movl    %esi, -24(%rbp)                                #saving second string in stack
+    popq    %rbp
     ret
+    
